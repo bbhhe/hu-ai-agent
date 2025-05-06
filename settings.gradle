@@ -1,0 +1,15 @@
+pluginManagement {
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/public/' }  // 阿里云公共仓库
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin/' }  // Gradle 插件专用仓库
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        mavenCentral()  // 可保留作为备用源
+    }
+}
+rootProject.name = 'hu-ai-agent'
