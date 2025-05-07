@@ -14,7 +14,7 @@ import com.alibaba.dashscope.utils.JsonUtils;
 
 public class DashscopeTests {
 
-    private static final String apiKey = "sk-xxxx";
+    private static final String apiKey = "sk-xxx";
 
     public static GenerationResult callWithMessage() throws ApiException, NoApiKeyException, InputRequiredException {
         Generation gen = new Generation();

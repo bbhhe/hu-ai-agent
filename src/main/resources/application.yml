@@ -1,6 +1,16 @@
 spring:
   application:
     name: hu-ai-agent
+  ai:
+    dashscope:
+      api-key: sk-xxx
+      chat:
+        options:
+          model: qwen-plus
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: deepseek-r1:1.5b
 server:
   port: 8123
   servlet:
