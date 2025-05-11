@@ -3,7 +3,7 @@ spring:
     name: hu-ai-agent
   ai:
     dashscope:
-      api-key: sk-xxx
+      api-key: sk-xxxx
       chat:
         options:
           model: qwen-plus
@@ -11,6 +11,9 @@ spring:
       base-url: http://localhost:11434
       chat:
         model: deepseek-r1:1.5b
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+    url: jdbc:sqlite:chat_memory.db
 server:
   port: 8123
   servlet:

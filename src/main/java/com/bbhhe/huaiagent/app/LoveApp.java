@@ -1,6 +1,7 @@
 package com.bbhhe.huaiagent.app;
 
 import com.bbhhe.huaiagent.advisor.MyLoggerAdvisor;
+import com.bbhhe.huaiagent.memory.SQLiteBasedChatMemory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
@@ -8,6 +9,8 @@ import org.springframework.ai.chat.memory.InMemoryChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor.CHAT_MEMORY_CONVERSATION_ID_KEY;
 import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor.CHAT_MEMORY_RETRIEVE_SIZE_KEY;
@@ -24,7 +27,8 @@ public class LoveApp {
 
     public LoveApp(ChatModel dashscopeChatModel) {
         //初始化基于内存的对话记忆
-        InMemoryChatMemory chatMemory = new InMemoryChatMemory();
+        //InMemoryChatMemory chatMemory = new InMemoryChatMemory();
+        SQLiteBasedChatMemory chatMemory = new SQLiteBasedChatMemory();
         chatClient = ChatClient.builder(dashscopeChatModel)
                 .defaultSystem(SYSTEM_PROMPT)
                 .defaultAdvisors(
@@ -45,4 +49,21 @@ public class LoveApp {
         log.info("content:{}",text);
         return text;
     }
+
+    public LoveReport doChatWithReport(String message, String chatId) {
+        LoveReport loveReport = chatClient
+                .prompt()
+                .system(SYSTEM_PROMPT + "每次对话后都要生成恋爱结果，标题为{用户名}的恋爱报告，内容为建议列表")
+                .user(message)
+                .advisors(spec -> spec.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
+                        .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 10))
+                .call()
+                .entity(LoveReport.class);
+        log.info("loveReport: {}", loveReport);
+        return loveReport;
+    }
+
+    record LoveReport(String title, List<String> suggestions) {
+    }
+
 }
