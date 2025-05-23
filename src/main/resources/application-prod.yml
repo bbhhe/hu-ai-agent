@@ -1,0 +1,9 @@
+spring:
+  ai:
+    dashscope:
+      api-key: ${dashscope-api-key}
+      chat:
+        options:
+          model: qwen-plus
+tavily-api:
+  api-key: ${tavily-api-key}
