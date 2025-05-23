@@ -1,19 +1,6 @@
 spring:
   application:
     name: hu-ai-agent
-  ai:
-    dashscope:
-      api-key: sk-xxxx
-      chat:
-        options:
-          model: qwen-plus
-    ollama:
-      base-url: http://localhost:11434
-      chat:
-        model: deepseek-r1:1.5b
-  datasource:
-    driver-class-name: org.sqlite.JDBC
-    url: jdbc:sqlite:chat_memory.db
 server:
   port: 8123
   servlet:
@@ -30,8 +17,3 @@ springdoc:
     - group: 'default'
       paths-to-match: '/**'
       packages-to-scan: com.bbhhe.huaiagent.controller
-# knife4j
-knife4j:
-  enable: true
-  setting:
-    language: zh_cn

@@ -1,20 +1,15 @@
 package com.bbhhe.huaiagent.app;
 
 import com.bbhhe.huaiagent.advisor.MyLoggerAdvisor;
-import com.bbhhe.huaiagent.memory.SQLiteBasedChatMemory;
-import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
-import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.chat.memory.InMemoryChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
-import java.util.List;
 
 import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor.CHAT_MEMORY_CONVERSATION_ID_KEY;
 import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor.CHAT_MEMORY_RETRIEVE_SIZE_KEY;
@@ -62,52 +57,5 @@ public class LoveApp {
                 .stream()
                 .content();
     }
-
-
-    public LoveReport doChatWithReport(String message, String chatId) {
-        LoveReport loveReport = chatClient
-                .prompt()
-                .system(SYSTEM_PROMPT + "每次对话后都要生成恋爱结果，标题为{用户名}的恋爱报告，内容为建议列表")
-                .user(message)
-                .advisors(spec -> spec.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
-                        .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 10))
-                .call()
-                .entity(LoveReport.class);
-        log.info("loveReport: {}", loveReport);
-        return loveReport;
-    }
-
-    record LoveReport(String title, List<String> suggestions) {
-    }
-
-
-    @Resource
-    private VectorStore loveAppVectorStore;
-
-    @Resource
-    private Advisor loveAppRagCloudAdvisor;
-
-    public String doChatWithRag(String message, String chatId) {
-        ChatResponse chatResponse = chatClient
-                .prompt()
-                .user(message)
-                .advisors(spec -> spec.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
-                        .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 10))
-                // 开启日志，便于观察效果
-                .advisors(new MyLoggerAdvisor())
-                // 应用知识库问答
-                //.advisors(new QuestionAnswerAdvisor(loveAppVectorStore))
-                //应用增强检索服务（云知识库服务）
-                .advisors(loveAppRagCloudAdvisor)
-                .call()
-                .chatResponse();
-        String content = chatResponse.getResult().getOutput().getText();
-        //log.info("content: {}", content);
-        return content;
-    }
-
-
-
-
 
 }
