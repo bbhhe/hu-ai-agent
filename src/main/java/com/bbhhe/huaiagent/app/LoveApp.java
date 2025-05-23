@@ -2,13 +2,17 @@ package com.bbhhe.huaiagent.app;
 
 import com.bbhhe.huaiagent.advisor.MyLoggerAdvisor;
 import com.bbhhe.huaiagent.memory.SQLiteBasedChatMemory;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.chat.memory.InMemoryChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
 
 import java.util.List;
 
@@ -27,8 +31,8 @@ public class LoveApp {
 
     public LoveApp(ChatModel dashscopeChatModel) {
         //初始化基于内存的对话记忆
-        //InMemoryChatMemory chatMemory = new InMemoryChatMemory();
-        SQLiteBasedChatMemory chatMemory = new SQLiteBasedChatMemory();
+        InMemoryChatMemory chatMemory = new InMemoryChatMemory();
+        //SQLiteBasedChatMemory chatMemory = new SQLiteBasedChatMemory();
         chatClient = ChatClient.builder(dashscopeChatModel)
                 .defaultSystem(SYSTEM_PROMPT)
                 .defaultAdvisors(
@@ -50,6 +54,16 @@ public class LoveApp {
         return text;
     }
 
+    public Flux<String> doChatByStream(String message, String chatId){
+        return chatClient.prompt()
+                .user(message)
+                .advisors(spec -> spec.param(CHAT_MEMORY_CONVERSATION_ID_KEY,chatId)
+                        .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY,10))
+                .stream()
+                .content();
+    }
+
+
     public LoveReport doChatWithReport(String message, String chatId) {
         LoveReport loveReport = chatClient
                 .prompt()
@@ -65,5 +79,35 @@ public class LoveApp {
 
     record LoveReport(String title, List<String> suggestions) {
     }
+
+
+    @Resource
+    private VectorStore loveAppVectorStore;
+
+    @Resource
+    private Advisor loveAppRagCloudAdvisor;
+
+    public String doChatWithRag(String message, String chatId) {
+        ChatResponse chatResponse = chatClient
+                .prompt()
+                .user(message)
+                .advisors(spec -> spec.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
+                        .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 10))
+                // 开启日志，便于观察效果
+                .advisors(new MyLoggerAdvisor())
+                // 应用知识库问答
+                //.advisors(new QuestionAnswerAdvisor(loveAppVectorStore))
+                //应用增强检索服务（云知识库服务）
+                .advisors(loveAppRagCloudAdvisor)
+                .call()
+                .chatResponse();
+        String content = chatResponse.getResult().getOutput().getText();
+        //log.info("content: {}", content);
+        return content;
+    }
+
+
+
+
 
 }

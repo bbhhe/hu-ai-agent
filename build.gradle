@@ -41,14 +41,26 @@ configurations {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    runtimeOnly 'org.postgresql:postgresql'
+
     implementation 'cn.hutool:hutool-all:5.8.37'
     implementation("com.github.xiaoymin:knife4j-openapi3-jakarta-spring-boot-starter:4.4.0")
-    implementation("com.alibaba:dashscope-sdk-java:2.19.5")
+    implementation("com.alibaba:dashscope-sdk-java:2.20.0")
+    implementation("org.springframework.ai:spring-ai-markdown-document-reader:1.0.0-M6")
+    implementation("org.commonmark:commonmark:0.24.0")
+    implementation 'org.jsoup:jsoup:1.19.1'
+    implementation("org.springframework.ai:spring-ai-starter-vector-store-pgvector:1.0.0-M7")
+    implementation 'com.aliyun:bailian20231229:2.0.6'
+
+    implementation 'com.itextpdf:itext-core:9.1.0'
+    testImplementation 'com.itextpdf:font-asian:9.1.0'
+
     //阿里集成springai
     implementation("com.alibaba.cloud.ai:spring-ai-alibaba-starter:1.0.0-M6.1")
     implementation("com.github.victools:jsonschema-generator:4.38.0")
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-    implementation("org.xerial:sqlite-jdbc:3.49.1.0")
+    //implementation("org.xerial:sqlite-jdbc:3.49.1.0")
     // langchain java版本
     //implementation("dev.langchain4j:langchain4j-community-dashscope:1.0.0-beta2")
     //ollama调用本地大模型
