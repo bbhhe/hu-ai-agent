@@ -1,4 +1,4 @@
-FROM openjdk:21-slim
+FROM dragonwell-registry.cn-hangzhou.cr.aliyuncs.com/dragonwell/dragonwell:21-extended-ga-alpine
 
 WORKDIR /app
 
