@@ -3,8 +3,14 @@
     <div class="chat-messages" ref="messagesContainer">
       <div v-for="(message, index) in messages" :key="index" 
            :class="['message', message.type === 'user' ? 'user-message' : 'ai-message']">
+        <div class="message-avatar" v-if="message.type === 'ai'">
+          <img src="../assets/ai-avatar.png" alt="AI Avatar" />
+        </div>
         <div class="message-content">
-          {{ message.content }}
+          <div class="message-text">{{ message.content }}</div>
+        </div>
+        <div class="message-avatar user-avatar" v-if="message.type === 'user'">
+          <img src="../assets/user-avatar.png" alt="User Avatar" />
         </div>
       </div>
     </div>
@@ -15,7 +21,7 @@
         placeholder="输入消息..."
         :disabled="isLoading"
       >
-      <button @click="sendMessage" :disabled="isLoading || !inputMessage.trim()">
+      <button class="btn" @click="sendMessage" :disabled="isLoading || !inputMessage.trim()">
         {{ isLoading ? '发送中...' : '发送' }}
       </button>
     </div>
@@ -33,6 +39,10 @@ const props = defineProps({
   apiEndpoint: {
     type: String,
     required: true
+  },
+  addNewline: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -67,7 +77,7 @@ const sendMessage = async () => {
     messages.value.push({ type: 'ai', content: '' })
 
     eventSource.onmessage = (event) => {
-      aiResponse += event.data
+      aiResponse += event.data + (props.addNewline ? '\n' : '')
       messages.value[messages.value.length - 1].content = aiResponse
     }
 
@@ -88,79 +98,126 @@ const sendMessage = async () => {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: var(--spacing-md);
+  background: var(--bg-light);
 }
 
 .chat-messages {
   flex: 1;
   overflow-y: auto;
-  padding: 1rem;
-  background: #f5f5f5;
-  border-radius: 8px;
-  margin-bottom: 1rem;
+  padding: var(--spacing-md);
+  background: var(--bg-color);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-md);
 }
 
 .message {
-  margin-bottom: 1rem;
   display: flex;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-md);
+  gap: var(--spacing-sm);
 }
 
-.user-message {
-  justify-content: flex-end;
+.message:last-child {
+  margin-bottom: 0;
 }
 
-.ai-message {
-  justify-content: flex-start;
+.message-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.message-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .message-content {
   max-width: 70%;
-  padding: 0.8rem 1rem;
-  border-radius: 8px;
+  min-width: 60px;
+}
+
+.message-text {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
   word-break: break-word;
+  white-space: pre-wrap;
+  line-height: 1.5;
 }
 
-.user-message .message-content {
-  background: #42b983;
+.user-message {
+  flex-direction: row-reverse;
+}
+
+.user-message .message-text {
+  background: var(--primary-color);
   color: white;
+  border-top-right-radius: 0;
 }
 
-.ai-message .message-content {
-  background: white;
-  color: #2c3e50;
+.ai-message .message-text {
+  background: var(--bg-light);
+  color: var(--text-color);
+  border-top-left-radius: 0;
+  text-align: left;
 }
 
 .chat-input {
   display: flex;
-  gap: 1rem;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--bg-light);
+  border-top: 1px solid var(--border-color);
 }
 
-input {
+.chat-input input {
   flex: 1;
-  padding: 0.8rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
+  min-width: 0;
 }
 
-button {
-  padding: 0.8rem 1.5rem;
-  background: #42b983;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .chat-room {
+    padding: var(--spacing-sm);
+  }
+
+  .message-content {
+    max-width: 80%;
+  }
+
+  .message-avatar {
+    width: 32px;
+    height: 32px;
+  }
 }
 
-button:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-}
+@media (max-width: 480px) {
+  .chat-room {
+    padding: var(--spacing-xs);
+  }
 
-button:hover:not(:disabled) {
-  background: #3aa876;
+  .chat-messages {
+    padding: var(--spacing-sm);
+  }
+
+  .message-content {
+    max-width: 85%;
+  }
+
+  .message-avatar {
+    width: 28px;
+    height: 28px;
+  }
+
+  .chat-input {
+    padding: var(--spacing-sm);
+    gap: var(--spacing-sm);
+  }
 }
 </style> 

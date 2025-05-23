@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景圆形 -->
+  <circle cx="100" cy="100" r="100" fill="#2c3e50"/>
+  
+  <!-- 用户图标 -->
+  <circle cx="100" cy="85" r="35" fill="white"/>
+  <path d="M50 160C50 138.909 66.909 122 88 122H112C133.091 122 150 138.909 150 160V180C150 182.761 147.761 185 145 185H55C52.239 185 50 182.761 50 180V160Z" fill="white"/>
+  
+  <!-- 装饰线条 -->
+  <circle cx="100" cy="100" r="90" stroke="white" stroke-width="2" stroke-opacity="0.2"/>
+  <circle cx="100" cy="100" r="70" stroke="white" stroke-width="2" stroke-opacity="0.1"/>
+</svg> 

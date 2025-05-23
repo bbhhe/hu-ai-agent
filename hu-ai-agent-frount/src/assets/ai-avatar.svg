@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景圆形 -->
+  <circle cx="100" cy="100" r="100" fill="#42b983"/>
+  
+  <!-- AI 图标 -->
+  <path d="M60 80C60 68.954 68.954 60 80 60H120C131.046 60 140 68.954 140 80V120C140 131.046 131.046 140 120 140H80C68.954 140 60 131.046 60 120V80Z" fill="white"/>
+  
+  <!-- A 字母 -->
+  <path d="M85 100H115L105 80H95L85 100ZM90 110L100 130L110 110H90Z" fill="#42b983"/>
+  
+  <!-- 装饰线条 -->
+  <circle cx="100" cy="100" r="90" stroke="white" stroke-width="2" stroke-opacity="0.2"/>
+  <circle cx="100" cy="100" r="70" stroke="white" stroke-width="2" stroke-opacity="0.1"/>
+</svg> 
