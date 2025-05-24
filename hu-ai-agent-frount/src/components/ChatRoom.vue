@@ -4,13 +4,13 @@
       <div v-for="(message, index) in messages" :key="index" 
            :class="['message', message.type === 'user' ? 'user-message' : 'ai-message']">
         <div class="message-avatar" v-if="message.type === 'ai'">
-          <img src="../assets/ai-avatar.png" alt="AI Avatar" />
+          <img src="../assets/ai-avatar.svg" alt="AI Avatar" />
         </div>
         <div class="message-content">
           <div class="message-text">{{ message.content }}</div>
         </div>
         <div class="message-avatar user-avatar" v-if="message.type === 'user'">
-          <img src="../assets/user-avatar.png" alt="User Avatar" />
+          <img src="../assets/user-avatar.svg" alt="User Avatar" />
         </div>
       </div>
     </div>
