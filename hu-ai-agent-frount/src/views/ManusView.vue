@@ -20,9 +20,10 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import ChatRoom from '../components/ChatRoom.vue'
+import { API_ENDPOINTS } from '../api/config'
 
 const chatId = ref('')
-const apiEndpoint = 'http://localhost:8123/api/ai/manus/chat'
+const apiEndpoint = API_ENDPOINTS.AI.MANUS_CHAT
 
 onMounted(() => {
   // 生成一个随机的聊天室 ID
