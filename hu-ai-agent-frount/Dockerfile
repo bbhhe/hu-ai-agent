@@ -1,7 +1,10 @@
 # 前端构建阶段
 FROM alibaba-cloud-linux-3-registry.cn-hangzhou.cr.aliyuncs.com/alinux3/node:20.16 AS build
 WORKDIR /app
-COPY . .
+# 更改 /app 目录权限
+RUN chown -R node:node /app
+# 复制文件并设置拥有者为 node
+COPY --chown=node:node . .
 RUN npm install
 RUN npm run build
 
