@@ -30,6 +30,7 @@
 
 <script setup>
 import { ref, onMounted, nextTick, watch } from 'vue'
+import { aiApi } from '../api/modules/ai'
 
 const props = defineProps({
   chatId: {
@@ -69,20 +70,29 @@ const sendMessage = async () => {
   isLoading.value = true
 
   try {
-    const eventSource = new EventSource(
-      `${props.apiEndpoint}?message=${encodeURIComponent(userMessage)}&chatId=${props.chatId}`
-    )
+    // 根据 API 端点选择不同的聊天方法
+    const isLoveApp = props.apiEndpoint.includes('love_app')
+    const chatMethod = isLoveApp ? aiApi.loveAppChat : aiApi.manusChat
 
-    let aiResponse = ''
-    messages.value.push({ type: 'ai', content: '' })
+    if (isLoveApp) {
+      // 使用 SSE 连接
+      const eventSource = chatMethod(userMessage, props.chatId)
+      let aiResponse = ''
+      messages.value.push({ type: 'ai', content: '' })
 
-    eventSource.onmessage = (event) => {
-      aiResponse += event.data + (props.addNewline ? '\n' : '')
-      messages.value[messages.value.length - 1].content = aiResponse
-    }
+      eventSource.onmessage = (event) => {
+        aiResponse += event.data + (props.addNewline ? '\n' : '')
+        messages.value[messages.value.length - 1].content = aiResponse
+      }
 
-    eventSource.onerror = () => {
-      eventSource.close()
+      eventSource.onerror = () => {
+        eventSource.close()
+        isLoading.value = false
+      }
+    } else {
+      // 使用普通 HTTP 请求
+      const response = await chatMethod(userMessage, props.chatId)
+      messages.value.push({ type: 'ai', content: response.message })
       isLoading.value = false
     }
   } catch (error) {
