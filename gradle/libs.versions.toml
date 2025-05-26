@@ -1,0 +1,41 @@
+[versions]
+# 插件版本
+spring-boot = "3.4.5"
+spring-dependency-management = "1.1.7"
+
+# 依赖版本
+hutool = "5.8.37"
+knife4j = "4.4.0"
+dashscope-sdk = "2.20.0"
+spring-ai = "1.0.0-M6"
+commonmark = "0.24.0"
+jsoup = "1.19.1"
+bailian = "2.0.6"
+itext-core = "9.1.0"
+itext-asian = "9.1.0"
+spring-ai-alibaba = "1.0.0-M6.1"
+jsonschema-generator = "4.38.0"
+lombok = "1.18.30"
+
+[libraries]
+# Spring Boot 相关
+spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+
+# 工具库
+hutool-all = { module = "cn.hutool:hutool-all", version.ref = "hutool" }
+knife4j-openapi3 = { module = "com.github.xiaoymin:knife4j-openapi3-jakarta-spring-boot-starter", version.ref = "knife4j" }
+dashscope-sdk = { module = "com.alibaba:dashscope-sdk-java", version.ref = "dashscope-sdk" }
+spring-ai-markdown = { module = "org.springframework.ai:spring-ai-markdown-document-reader", version.ref = "spring-ai" }
+commonmark = { module = "org.commonmark:commonmark", version.ref = "commonmark" }
+jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
+bailian = { module = "com.aliyun:bailian20231229", version.ref = "bailian" }
+itext-core = { module = "com.itextpdf:itext-core", version.ref = "itext-core" }
+itext-asian = { module = "com.itextpdf:font-asian", version.ref = "itext-asian" }
+spring-ai-alibaba = { module = "com.alibaba.cloud.ai:spring-ai-alibaba-starter", version.ref = "spring-ai-alibaba" }
+jsonschema-generator = { module = "com.github.victools:jsonschema-generator", version.ref = "jsonschema-generator" }
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" } 
