@@ -16,11 +16,17 @@ itext-asian = "9.1.0"
 spring-ai-alibaba = "1.0.0-M6.1"
 jsonschema-generator = "4.38.0"
 lombok = "1.18.30"
+pgvector = "1.0.0-M6"
 
 [libraries]
 # Spring Boot 相关
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc" }
+
+# Spring ai
+spring-ai-vectore-pgvectore = {module = "org.springframework.ai:spring-ai-pgvector-store", version.ref="pgvector"}
+postgressql = {module = "org.postgresql:postgresql"}
 
 # 工具库
 hutool-all = { module = "cn.hutool:hutool-all", version.ref = "hutool" }
