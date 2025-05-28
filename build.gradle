@@ -58,6 +58,12 @@ dependencies {
     //阿里集成springai
     implementation libs.spring.ai.alibaba
     implementation libs.jsonschema.generator
+
+    //向量数据库
+    implementation libs.spring.boot.starter.jdbc
+    implementation libs.spring.ai.vectore.pgvectore
+    implementation libs.postgressql
+
     //implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     //implementation("org.xerial:sqlite-jdbc:3.49.1.0")
     // langchain java版本

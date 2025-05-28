@@ -10,7 +10,13 @@ export const aiApi = {
       chatId,
     });
   },
-
+  // rag知识库聊天
+  ragAppChat: (message, chatId) => {
+    return createSSEConnection(API_ENDPOINTS.AI.RAG_APP_CHAT, {
+      message,
+      chatId,
+    });
+  },
   // 超级智能体聊天
   manusChat: (message, chatId) => {
     return request.post(API_ENDPOINTS.AI.MANUS_CHAT, {

@@ -72,9 +72,18 @@ const sendMessage = async () => {
   try {
     // 根据 API 端点选择不同的聊天方法
     const isLoveApp = props.apiEndpoint.includes('love_app')
-    const chatMethod = isLoveApp ? aiApi.loveAppChat : aiApi.manusChat
+    const isRagApp = props.apiEndpoint.includes('rag_app')
+    let chatMethod
 
     if (isLoveApp) {
+      chatMethod = aiApi.loveAppChat
+    } else if (isRagApp) {
+      chatMethod = aiApi.ragAppChat
+    } else {
+      chatMethod = aiApi.manusChat
+    }
+
+    if (isLoveApp || isRagApp) {
       // 使用 SSE 连接
       const eventSource = chatMethod(userMessage, props.chatId)
       let aiResponse = ''

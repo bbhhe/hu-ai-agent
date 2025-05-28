@@ -18,6 +18,7 @@ export const API_ENDPOINTS = {
   AI: {
     LOVE_APP_CHAT: "/ai/love_app/chat/sse",
     MANUS_CHAT: "/ai/manus/chat",
+    RAG_APP_CHAT: "/ai/rag_app/chat/sse/emitter",
   },
   // 其他模块的 API 端点可以在这里添加
 };

@@ -14,6 +14,15 @@
         <h2>AI 恋爱大师</h2>
         <p>与 AI 恋爱大师进行对话，获取专业的情感建议和指导</p>
       </router-link>
+      <router-link to="/rag-app" class="app-card">
+        <div class="app-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9h-4v4h-2v-4H9V9h4V5h2v4h4v2z" fill="currentColor"/>
+          </svg>
+        </div>
+        <h2>知识库智能助手</h2>
+        <p>基于知识库的智能问答系统，为您提供准确的信息服务</p>
+      </router-link>
       <router-link to="/manus" class="app-card">
         <div class="app-icon">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

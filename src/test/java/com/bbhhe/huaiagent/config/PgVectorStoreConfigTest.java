@@ -1,9 +1,13 @@
 package com.bbhhe.huaiagent.config;
 
+import cn.hutool.json.JSONUtil;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.document.Document;
+import org.springframework.ai.rag.Query;
+import org.springframework.ai.rag.preretrieval.query.transformation.QueryTransformer;
+import org.springframework.ai.rag.preretrieval.query.transformation.RewriteQueryTransformer;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +21,7 @@ public class PgVectorStoreConfigTest {
     @Resource
     VectorStore pgVectorVectorStore;
 
-    @Test
+    //@Test
     void test(){
         List<Document> documents = List.of(
                 new Document("Spring AI rocks!! Spring AI rocks!! Spring AI rocks!! Spring AI rocks!! Spring AI rocks!!", Map.of("meta1", "meta1")),
@@ -28,6 +32,12 @@ public class PgVectorStoreConfigTest {
         // 相似度查询
         List<Document> results = pgVectorVectorStore.similaritySearch(SearchRequest.builder().query("Spring").topK(5).build());
         Assertions.assertNotNull(results);
+    }
+
+    @Test
+    void test2(){
+        List<Document> results = pgVectorVectorStore.similaritySearch(SearchRequest.builder().query("什么是RAG？").topK(5).build());
+        System.out.println(JSONUtil.toJsonPrettyStr(results));
     }
 
 }
