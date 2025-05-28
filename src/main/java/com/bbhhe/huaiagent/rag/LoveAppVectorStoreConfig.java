@@ -22,7 +22,7 @@ public class LoveAppVectorStoreConfig {
                 .build();
         // 加载文档
         List<Document> documents = loveAppDocumentLoader.loadMarkdowns();
-        simpleVectorStore.add(documents);
+        //simpleVectorStore.add(documents);
         return simpleVectorStore;
     }
 }

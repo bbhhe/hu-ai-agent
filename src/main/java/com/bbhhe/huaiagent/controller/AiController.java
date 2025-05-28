@@ -2,6 +2,7 @@ package com.bbhhe.huaiagent.controller;
 
 import com.bbhhe.huaiagent.agent.HuManus;
 import com.bbhhe.huaiagent.app.LoveApp;
+import com.bbhhe.huaiagent.app.RagApp;
 import jakarta.annotation.Resource;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.tool.ToolCallback;
@@ -20,6 +21,9 @@ public class AiController {
 
     @Resource
     private LoveApp loveApp;
+
+    @Resource
+    private RagApp ragApp;
 
     @Resource
     private ToolCallback[] allTools;
@@ -80,6 +84,30 @@ public class AiController {
     public SseEmitter doChatWithManus(String message) {
         HuManus yuManus = new HuManus(allTools, dashscopeChatModel);
         return yuManus.runStream(message);
+    }
+
+    @GetMapping("/rag_app/chat/sse/emitter")
+    public SseEmitter doChatWithRagAppSseEmitter(String message, String chatId) {
+        // 创建一个超时时间较长的 SseEmitter
+        SseEmitter emitter = new SseEmitter(180000L); // 3分钟超时
+        // 获取 Flux 数据流并直接订阅
+        ragApp.doChatWithRagByStream(message, chatId)
+                .subscribe(
+                        // 处理每条消息
+                        chunk -> {
+                            try {
+                                emitter.send(chunk);
+                            } catch (IOException e) {
+                                emitter.completeWithError(e);
+                            }
+                        },
+                        // 处理错误
+                        emitter::completeWithError,
+                        // 处理完成
+                        emitter::complete
+                );
+        // 返回emitter
+        return emitter;
     }
 
 }
