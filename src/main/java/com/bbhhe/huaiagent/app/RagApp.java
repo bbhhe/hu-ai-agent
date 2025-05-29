@@ -6,9 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
+import org.springframework.ai.chat.client.advisor.RetrievalAugmentationAdvisor;
 import org.springframework.ai.chat.memory.InMemoryChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.rag.retrieval.search.VectorStoreDocumentRetriever;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
@@ -51,14 +53,31 @@ public class RagApp {
         return text;
     }
 
-    public Flux<String> doChatWithRagByStream(String message, String chatId){
+    public Flux<ChatResponse> doChatWithRagByStream(String message, String chatId){
+        //QuestionA؜nswerAdvi⁢sor 查询增强
+//        return chatClient.prompt()
+//                .user(message)
+//                .advisors(spec -> spec.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
+//                        .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 10))
+//                .advisors(new MyLoggerAdvisor())
+//                .advisors(new QuestionAnswerAdvisor(pgVectorVectorStore))
+//                .stream()
+//                .content();
+
+        //Retrieval؜AugmentationAdvisor 查询增强
+        RetrievalAugmentationAdvisor advisor = RetrievalAugmentationAdvisor.builder()
+                .documentRetriever(VectorStoreDocumentRetriever.builder()
+                        .similarityThreshold(0.50)
+                        .vectorStore(pgVectorVectorStore)
+                        .build())
+                .build();
+
         return chatClient.prompt()
+                              .advisors(spec -> spec.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
+                       .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 10))
+                .advisors(advisor)
                 .user(message)
-                .advisors(spec -> spec.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
-                        .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 10))
-                .advisors(new MyLoggerAdvisor())
-                .advisors(new QuestionAnswerAdvisor(pgVectorVectorStore))
                 .stream()
-                .content();
+                .chatResponse();
     }
 }
